@@ -55,37 +55,8 @@ struct HomeView: View {
     }
 }
 
-struct MovieCardView: View {
-    let movie: Movie
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/w200\(movie.posterPath ?? "")")) { image in
-                image.resizable()
-                    .scaledToFill()
-            } placeholder: {
-                Color.gray.opacity(0.3)
-            }
-            .frame(width: 80, height: 120)
-            .cornerRadius(10)
-            .clipped()
-
-            VStack(alignment: .leading, spacing: 6) {
-                Text(movie.title)
-                    .font(.headline)
-                    .foregroundColor(.primary)
-
-                Text(movie.overview)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .lineLimit(4)
-            }
-
-            Spacer()
-        }
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
     }
 }
