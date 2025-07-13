@@ -12,23 +12,26 @@ class MovieService {
     private let baseURL = "https://api.themoviedb.org/3/movie/now_playing"
     private let apiKey = Constants.apiKey
 
-    func fetchNowPlaying(completion: @escaping (Result<[Movie], Error>) -> Void) {
+    func fetchNowPlaying(page: Int, completion: @escaping (Result<[Movie], Error>) -> Void) {
         let parameters: Parameters = [
-            "api_key": apiKey
+            "api_key": apiKey,
+            "page": page
         ]
 
         AF.request(baseURL, parameters: parameters)
-            .validate() // Automatically checks for 200...299 status codes
+            .validate()
             .responseDecodable(of: NowPlayingResponse.self) { response in
                 switch response.result {
-                case .success(let nowPlaying):
-                    completion(.success(nowPlaying.results))
+                case .success(let result):
+                    completion(.success(result.results))
                 case .failure(let error):
                     completion(.failure(error))
                 }
             }
     }
 }
+
+
 
 
 
