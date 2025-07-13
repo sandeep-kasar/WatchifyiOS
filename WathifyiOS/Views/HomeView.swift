@@ -24,13 +24,11 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             VStack(alignment: .leading) {
-                // Custom top bar with title and search
+                // Top Bar
                 HStack {
                     Text("Watchify")
                         .font(.title2)
-
                     Spacer()
-
                     Image(systemName: "magnifyingglass")
                         .font(.title2)
                         .foregroundColor(.primary)
@@ -40,9 +38,20 @@ struct HomeView: View {
 
                 ScrollView {
                     LazyVStack(spacing: 16) {
-                        ForEach(filteredMovies) { movie in
+                        ForEach(filteredMovies.indices, id: \.self) { index in
+                            let movie = filteredMovies[index]
                             MovieCardView(movie: movie)
                                 .padding(.horizontal)
+                                .onAppear {
+                                    if searchText.isEmpty && index == filteredMovies.count - 1 {
+                                        viewModel.loadNowPlaying()
+                                    }
+                                }
+                        }
+
+                        if viewModel.isLoading {
+                            ProgressView("Loading...")
+                                .padding()
                         }
                     }
                     .padding(.top)
@@ -51,9 +60,12 @@ struct HomeView: View {
             .onAppear {
                 viewModel.loadNowPlaying()
             }
+            .navigationBarHidden(true)
         }
     }
 }
+
+
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
